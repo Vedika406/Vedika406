@@ -1,0 +1,106 @@
+/* Base Styling */
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Header Section */
+header {
+  background: #333;
+  color: white;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2em;
+}
+
+.controls {
+  margin-top: 10px;
+}
+
+input[type="text"] {
+  padding: 8px;
+  margin: 5px;
+  width: 250px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 8px 14px;
+  margin: 5px;
+  border: none;
+  background: #007BFF;
+  color: white;
+  font-size: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+/* Table Styling */
+table {
+  width: 90%;
+  max-width: 900px;
+  margin: 20px auto;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+th {
+  background: #444;
+  color: white;
+}
+
+/* Conditional Coloring for Change % */
+td[style*="color:green"] {
+  font-weight: bold;
+}
+
+td[style*="color:red"] {
+  font-weight: bold;
+}
+
+/* Dark Mode Support (optional toggle) */
+body.dark-mode {
+  background: #121212;
+  color: #e0e0e0;
+}
+
+body.dark-mode table {
+  background: #1e1e1e;
+}
+
+body.dark-mode th {
+  background: #333;
+}
+
+body.dark-mode td {
+  color: #e0e0e0;
+}
+
+body.dark-mode input,
+body.dark-mode button {
+  background-color: #333;
+  color: #f0f0f0;
+  border: 1px solid #444;
+}
