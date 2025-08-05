@@ -1,100 +1,143 @@
-const API_KEY = "c80b860793msh2be7c48efc30fdfp1b8a0fjsn3b8c28ba9f70";
-const API_HOST = "apidojo-yahoo-finance-v1.p.rapidapi.com";
 
-const logoMap = {
-  "TCS.BO": "https://companieslogo.com/img/orig/TCS.BO_BIG-043b6d2f.png",
-  "RELIANCE.BO": "https://companieslogo.com/img/orig/RELIANCE.BO_BIG-ad85f5c4.png",
-  "INFY.BO": "https://companieslogo.com/img/orig/INFY.BO_BIG-b17772d0.png"
-};
+// const FINNHUB_API_KEY = "d2906u1r01qvka4revn0d2906u1r01qvka4revng";
 
-const companies = Object.keys(logoMap);
+// // List of company symbols
+// const companies = [
+//   "AAPL", "MSFT", "GOOGL", "AMZN", "TSLA",
+//   "NFLX", "META", "NVDA", "INTC", "ADBE"
+// ];
 
-// Home page fetch
-if (document.getElementById("stockTable")) {
-  async function fetchStocks() {
-    const url = `https://${API_HOST}/market/v2/get-quotes?region=IN&symbols=${companies.join(",")}`;
-    const res = await fetch(url, {
-      headers: {
-        "X-RapidAPI-Key": API_KEY,
-        "X-RapidAPI-Host": API_HOST
-      }
-    });
-    const data = await res.json();
-    displayStocks(data.quoteResponse.result);
-  }
+// // Fetch stock quotes & logos
+// async function fetchStocksFinnhub() {
+//   const table = document.getElementById("stockTable");
+//   table.innerHTML = "";
 
-  function displayStocks(stocks) {
-    const table = document.getElementById("stockTable");
-    table.innerHTML = "";
-    stocks.forEach(stock => {
+//   for (const symbol of companies) {
+//     try {
+//       // Fetch quote
+//       const quoteRes = await fetch(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${FINNHUB_API_KEY}`);
+//       const quote = await quoteRes.json();
+
+//       // Fetch company profile (logo)
+//       const profileRes = await fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${FINNHUB_API_KEY}`);
+//       const profile = await profileRes.json();
+
+//       // Create row
+//       const row = document.createElement("tr");
+//       row.innerHTML = `
+//         <td><img src="${profile.logo}" width="40" height="40" /></td>
+//         <td>${symbol}</td>
+//         <td>$${quote.c.toFixed(2)}</td>
+//         <td style="color:${quote.dp >= 0 ? 'green' : 'red'}">${quote.dp.toFixed(2)}%</td>
+//         <td>${quote.v ? quote.v.toLocaleString() : "N/A"}</td>
+//         <td><button onclick="fetchChartDataFinnhub('${symbol}')">📊 Graph</button></td>
+//       `;
+//       table.appendChild(row);
+
+//     } catch (err) {
+//       console.error(`Error fetching data for ${symbol}:`, err);
+//     }
+//   }
+// }
+
+// // Fetch historical data for Chart.js (last 7 days)
+// async function fetchChartDataFinnhub(symbol) {
+//   const now = Math.floor(Date.now() / 1000);
+//   const oneWeekAgo = now - 7 * 24 * 60 * 60;
+
+//   const url = `https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=D&from=${oneWeekAgo}&to=${now}&token=${FINNHUB_API_KEY}`;
+//   const res = await fetch(url);
+//   const data = await res.json();
+
+//   if (data.s !== "ok") {
+//     console.error("Error fetching historical data:", data);
+//     return;
+//   }
+
+//   const labels = data.t.map(timestamp => new Date(timestamp * 1000).toLocaleDateString());
+//   const prices = data.c;
+
+//   drawChart(labels, prices, symbol);
+// }
+
+// // Chart.js setup
+// function drawChart(labels, prices, symbol) {
+//   const ctx = document.getElementById('stockChart').getContext('2d');
+//   new Chart(ctx, {
+//     type: 'line',
+//     data: {
+//       labels: labels,
+//       datasets: [{
+//         label: `Price History: ${symbol}`,
+//         data: prices,
+//         borderColor: 'blue',
+//         fill: false
+//       }]
+//     },
+//     options: {
+//       responsive: true,
+//       scales: {
+//         y: {
+//           beginAtZero: false
+//         }
+//       }
+//     }
+//   });
+
+//   document.getElementById("chartContainer").style.display = "block";
+// }
+
+// // Initial calls
+// fetchStocksFinnhub();
+// fetchChartDataFinnhub("AAPL");
+
+
+
+const FINNHUB_API_KEY = "d2906u1r01qvka4revn0d2906u1r01qvka4revng";
+
+// Predefined stock symbols
+const companies = [
+  "AAPL", "MSFT", "GOOGL", "AMZN", "TSLA",
+  "NFLX", "META", "NVDA", "INTC", "ADBE"
+];
+
+// Fetch stock details and display in table
+async function fetchStocksFinnhub() {
+  const table = document.getElementById("stockTable");
+  table.innerHTML = "";
+
+  for (const symbol of companies) {
+    try {
+      // Fetch stock quote
+      const quoteRes = await fetch(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${FINNHUB_API_KEY}`);
+      const quote = await quoteRes.json();
+
+      // Fetch stock profile (logo)
+      const profileRes = await fetch(`https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${FINNHUB_API_KEY}`);
+      const profile = await profileRes.json();
+
+      // Create table row
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td><img src="${logoMap[stock.symbol] || 'https://via.placeholder.com/40'}" width="40" /></td>
-        <td><a href="details.html?symbol=${stock.symbol}">${stock.symbol}</a></td>
-        <td>₹${stock.regularMarketPrice?.toFixed(2)}</td>
-        <td style="color:${stock.regularMarketChangePercent >= 0 ? 'green' : 'red'}">
-          ${stock.regularMarketChangePercent?.toFixed(2)}%
-        </td>
-        <td>${stock.regularMarketVolume?.toLocaleString() || "N/A"}</td>
+        <td><img src="${profile.logo}" width="40" height="40" alt="${symbol} logo"/></td>
+        <td>${symbol}</td>
+        <td>$${quote.c.toFixed(2)}</td>
+        <td style="color:${quote.dp >= 0 ? 'green' : 'red'}">${quote.dp.toFixed(2)}%</td>
+        <td>${quote.v ? quote.v.toLocaleString() : "N/A"}</td>
+        <td><button onclick="redirectToGraph('${symbol}')">📊 Graph</button></td>
       `;
       table.appendChild(row);
-    });
-  }
 
-  function searchCompany() {
-    const input = document.getElementById("stockInput");
-    const symbol = input.value.toUpperCase();
-    if (symbol) {
-      window.location.href = `details.html?symbol=${symbol}`;
+    } catch (err) {
+      console.error(`Error fetching data for ${symbol}:`, err);
     }
   }
-
-  fetchStocks();
-  setInterval(fetchStocks, 30000);
 }
 
-// Details page fetch
-async function fetchDetails(symbol) {
-  const url = `https://${API_HOST}/market/v2/get-quotes?region=IN&symbols=${symbol}`;
-  const res = await fetch(url, {
-    headers: {
-      "X-RapidAPI-Key": API_KEY,
-      "X-RapidAPI-Host": API_HOST
-    }
-  });
-  const data = await res.json();
-  const stock = data.quoteResponse.result[0];
-  document.getElementById("companyName").textContent = stock.shortName;
-  document.getElementById("companyLogo").src = logoMap[symbol] || "https://via.placeholder.com/100";
-  document.getElementById("price").textContent = stock.regularMarketPrice?.toFixed(2);
-  document.getElementById("change").textContent = `${stock.regularMarketChangePercent?.toFixed(2)}%`;
-  document.getElementById("volume").textContent = stock.regularMarketVolume?.toLocaleString();
-
-  // Graph (mock example)
-  drawChart([1, 2, 3, 4, 5, 6, 7], [stock.regularMarketPrice - 20, stock.regularMarketPrice - 10, stock.regularMarketPrice, stock.regularMarketPrice + 5, stock.regularMarketPrice + 10, stock.regularMarketPrice + 2, stock.regularMarketPrice]);
-
-  // News (you can use News API instead)
-  document.getElementById("newsList").innerHTML = `
-    <li>Stock is in news for its recent performance</li>
-    <li>Analysts predict growth in the coming months</li>
-  `;
+// Redirect to graph page
+function redirectToGraph(symbol) {
+  window.location.href = `graph.html?symbol=${symbol}`;
 }
 
-function drawChart(labels, values) {
-  const ctx = document.getElementById("stockChart").getContext("2d");
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels.map((_, i) => `Day ${i + 1}`),
-      datasets: [{
-        label: 'Price (INR)',
-        data: values,
-        borderColor: 'blue',
-        fill: false
-      }]
-    },
-    options: {
-      responsive: true
-    }
-  });
-}
+// Call on page load
+fetchStocksFinnhub();

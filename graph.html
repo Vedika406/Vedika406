@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Graph</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f4f4;
+      text-align: center;
+    }
+    h1 {
+      background: #333;
+      color: #fff;
+      padding: 20px;
+      margin: 0;
+    }
+    canvas {
+      width: 95% !important;
+      max-width: 1200px;
+      height: 500px !important;
+      margin: 30px auto;
+      display: block;
+      background: #fff;
+      border: 1px solid #ddd;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .back-btn {
+      margin: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .back-btn:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="stockTitle"></h1>
+  <button class="back-btn" onclick="window.location.href='index.html'">⬅ Back</button>
+  <canvas id="stockChart"></canvas>
+
+  <script>
+    const FINNHUB_API_KEY = "d2906u1r01qvka4revn0d2906u1r01qvka4revng";
+
+    // Read symbol from URL
+    const params = new URLSearchParams(window.location.search);
+    const symbol = params.get("symbol");
+    document.getElementById("stockTitle").innerText = `Price History: ${symbol}`;
+
+    // Fetch historical data (last 30 days)
+    async function fetchChartDataFinnhub(symbol) {
+      const now = Math.floor(Date.now() / 1000);
+      const oneMonthAgo = now - 30 * 24 * 60 * 60;
+
+      const url = `https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=D&from=${oneMonthAgo}&to=${now}&token=${FINNHUB_API_KEY}`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data.s !== "ok") {
+        console.error("Error fetching historical data:", data);
+        return;
+      }
+
+      const labels = data.t.map(t => new Date(t * 1000).toLocaleDateString());
+      const prices = data.c;
+      drawChart(labels, prices, symbol);
+    }
+
+    // Draw Chart.js line graph
+    function drawChart(labels, prices, symbol) {
+      const ctx = document.getElementById("stockChart").getContext("2d");
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [{
+            label: `Price ($)`,
+            data: prices,
+            borderColor: "blue",
+            borderWidth: 2,
+            fill: false,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: true },
+            title: { display: true, text: `${symbol} Stock Price (Last 30 Days)` }
+          },
+          scales: {
+            x: { display: true, title: { display: true, text: 'Date' } },
+            y: { display: true, title: { display: true, text: 'Price ($)' } }
+          }
+        }
+      });
+    }
+
+    fetchChartDataFinnhub(symbol);
+  </script>
+</body>
+</html>
