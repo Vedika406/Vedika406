@@ -1,16 +1,23 @@
 
- <!DOCTYPE html>
+ <!DOCTYPE html> 
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live Stock Tracker</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>📈 Live Stock Tracker</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <h1>📈 Live Stock Tracker</h1>
+    <div class="controls">
+      <input type="text" id="searchSymbol" placeholder="Enter Symbol" />
+      <button onclick="searchStock()">Search</button>
+      <button id="refreshBtn">🔄 Refresh</button>
+      <button id="darkModeToggle">🌙 Dark Mode</button>
+    </div>
   </header>
+
   <main>
     <table>
       <thead>
@@ -19,13 +26,38 @@
           <th>Symbol</th>
           <th>Price</th>
           <th>Change %</th>
-          <th>Volume</th>
           <th>Graph</th>
         </tr>
       </thead>
       <tbody id="stockTable"></tbody>
     </table>
   </main>
+
   <script src="script.js"></script>
 </body>
-</html>
+</html> 
+ 
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <h1>📈 Stock Tracker</h1>
+        <div>
+            <button id="darkModeBtn">🌙 Dark Mode</button>
+            <button id="refreshBtn">🔄 Refresh</button>
+        </div>
+    </header>
+
+    <div id="stocksContainer" class="stocks-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html> -->
+
