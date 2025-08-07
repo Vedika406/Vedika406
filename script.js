@@ -1,79 +1,6 @@
 
 
 
-// const FINNHUB_API_KEY = "d28ejfpr01qjsuf31jj0d28ejfpr01qjsuf31jjg";
-
-// // Expanded stock list
-// let companies = [
-//   "AAPL", "MSFT", "GOOGL", "AMZN", "TSLA",
-//   "META", "NVDA", "NFLX", "AMD", "INTC",
-//   "BABA", "PYPL", "SHOP", "SQ", "UBER",
-//   "DIS", "NKE", "PEP", "KO", "V", "MA",
-//   "WMT", "PFE", "MRNA", "JPM", "BA",
-//   "ORCL", "CSCO", "COST", "T", "GE"
-// ];
-
-// // Fetch stock data
-// async function fetchStocks() {
-//   const table = document.getElementById("stockTable");
-//   table.innerHTML = "";
-
-//   for (const symbol of companies) {
-//     try {
-//       // Stock quote
-//       const quoteRes = await fetch(
-//         `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${FINNHUB_API_KEY}`
-//       );
-//       const quote = await quoteRes.json();
-
-//       // Company profile
-//       const profileRes = await fetch(
-//         `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${FINNHUB_API_KEY}`
-//       );
-//       const profile = await profileRes.json();
-
-//       const row = document.createElement("tr");
-//       row.innerHTML = `
-//         <td><img src="${profile.logo}" width="40" height="40" alt="${symbol} logo" /></td>
-//         <td>${symbol}</td>
-//         <td>$${quote.c ? quote.c.toFixed(2) : "N/A"}</td>
-//         <td style="color:${quote.dp >= 0 ? "green" : "red"}">${quote.dp ? quote.dp.toFixed(2) : "0"}%</td>
-//         <td><button onclick="redirectToGraph('${symbol}')">📊 Graph</button></td>
-//       `;
-//       table.appendChild(row);
-//     } catch (err) {
-//       console.error(`Error fetching data for ${symbol}:`, err);
-//     }
-//   }
-// }
-
-// // Search functionality
-// function searchStock() {
-//   const symbol = document.getElementById("searchSymbol").value.toUpperCase();
-//   if (!symbol) return;
-//   companies = [symbol];
-//   fetchStocks();
-// }
-
-// // Redirect to stock graph page
-// function redirectToGraph(symbol) {
-//   window.location.href = `graph.html?symbol=${symbol}`;
-// }
-
-// // Dark mode toggle
-// document.getElementById("darkModeToggle").addEventListener("click", () => {
-//   document.body.classList.toggle("dark-mode");
-// });
-
-// // Refresh button (manual refresh only)
-// document.getElementById("refreshBtn").addEventListener("click", () => {
-//   fetchStocks();
-// });
-
-// // Initial fetch when page loads
-// fetchStocks();
-
-
 const apiKey = "d28ejfpr01qjsuf31jj0d28ejfpr01qjsuf31jjg";
 const companies = [
     { symbol: "AAPL", name: "Apple", logo: "https://logo.clearbit.com/apple.com" },
@@ -85,7 +12,17 @@ const companies = [
     { symbol: "NFLX", name: "Netflix", logo: "https://logo.clearbit.com/netflix.com" },
     { symbol: "NVDA", name: "Nvidia", logo: "https://logo.clearbit.com/nvidia.com" },
     { symbol: "BABA", name: "Alibaba", logo: "https://logo.clearbit.com/alibaba.com" },
-    { symbol: "ORCL", name: "Oracle", logo: "https://logo.clearbit.com/oracle.com" }
+    { symbol: "ORCL", name: "Oracle", logo: "https://logo.clearbit.com/oracle.com" },
+    { symbol: "INTC", name: "Intel", logo: "https://logo.clearbit.com/intel.com" },
+    { symbol: "ADBE", name: "Adobe", logo: "https://logo.clearbit.com/adobe.com" },
+    { symbol: "SAP", name: "SAP", logo: "https://logo.clearbit.com/sap.com" },
+    { symbol: "PYPL", name: "PayPal", logo: "https://logo.clearbit.com/paypal.com" },
+    { symbol: "UBER", name: "Uber", logo: "https://logo.clearbit.com/uber.com" },
+    { symbol: "CRM", name: "Salesforce", logo: "https://logo.clearbit.com/salesforce.com" },
+    { symbol: "SHOP", name: "Shopify", logo: "https://logo.clearbit.com/shopify.com" },
+    { symbol: "PEP", name: "PepsiCo", logo: "https://logo.clearbit.com/pepsico.com" },
+    { symbol: "KO", name: "Coca-Cola", logo: "https://logo.clearbit.com/coca-colacompany.com" },
+    { symbol: "DIS", name: "Disney", logo: "https://logo.clearbit.com/disney.com" }
 ];
 
 async function fetchStock(symbol) {
