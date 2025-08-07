@@ -91,8 +91,8 @@ async function displayStocks() {
     card.classList.add("stock-card");
 
     const chartApiKey = i < 10
-      ? "3127e11a4fea46469190cc7c0d1eab3d"
-      : "765d59d693b34948a506fc14e69d508d";
+      ? "0f9a9131ac6e48b9a5d3e25ecfe8d630"
+      : "911084a33b624cf3b58c783961b00701";
 
     card.setAttribute("data-name", `${company.name} ${company.symbol}`.toLowerCase());
 
