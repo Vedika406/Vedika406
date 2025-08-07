@@ -1,5 +1,5 @@
 
- <!DOCTYPE html> 
+ <!-- <!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -35,9 +35,9 @@
 
   <script src="script.js"></script>
 </body>
-</html> 
+</html>  -->
  
-<!-- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,6 +45,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Tracker</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header class="navbar">
@@ -56,8 +57,21 @@
     </header>
 
     <div id="stocksContainer" class="stocks-container"></div>
+    <!-- Modal for Stock Details -->
+    <div id="stockModal" class="modal">
+      <div class="modal-content">
+        <span onclick="closeModal()" class="close-btn">&times;</span>
+        <h2 id="modalCompanyName"></h2>
+        <p>Price: ₹<span id="modalPrice"></span></p>
+        <p>Change: <span id="modalChange"></span></p>
+        <p>% Change: <span id="modalPercentChange"></span></p>
+        <canvas id="chart--${company.symbol}" class="stock-chart" width="400" height="200"></canvas>
+      </div>
+    </div>
+    
+    <p id="lastUpdated" style="text-align:center; font-style:italic; margin-top:10px;"></p>
 
     <script src="script.js"></script>
 </body>
-</html> -->
+</html>
 

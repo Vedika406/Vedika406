@@ -1,5 +1,5 @@
 
-   body {
+   /* body {
   font-family: Arial, sans-serif;
   margin: 0;
   background: #f5f5f5;
@@ -68,13 +68,13 @@ th {
 
 body.dark-mode th {
   background: #444;
-} 
+}  */
 
 
   
 
 /* Basic Styling */
-/* body {
+body {
     font-family: 'Poppins', sans-serif;
     background: var(--bg);
     color: var(--text);
@@ -157,4 +157,108 @@ body.dark-mode {
 .price-down { color: #f44336; font-weight: bold; }
 
 .details-container { padding: 20px; }
-.details-info p { font-size: 18px; } */
+.details-info p { font-size: 18px; }
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--card-bg);
+  padding: 25px 30px;
+  border-radius: 20px;
+  width: 320px;
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+  color: var(--text);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -60%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+.modal-content {
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  font-size: 22px;
+}
+
+.modal-content p {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.close-btn {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  cursor: pointer;
+  font-size: 22px;
+  color: #f44336;
+  font-weight: bold;
+}
+.close-btn:hover {
+  color: #ff7961;
+}
+
+.more-info {
+    display: none;
+}
+
+.stock-card {
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Allows absolutely positioning inside */
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+.stock-card .more-info {
+  display: none; /* hidden by default */
+  margin-top: 10px;
+  width: 100%;
+}
+
+.stock-card.expanded .more-info {
+  display: block; /* show when expanded class is present */
+}
+
+.stock-logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.view-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 6px 12px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.view-btn:hover {
+  background-color: #0056b3;
+}
+
+.stock-chart {
+  margin-top: 20px;
+  max-width: 100%;
+}
+
