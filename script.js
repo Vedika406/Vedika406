@@ -1,6 +1,3 @@
-
-
-
 const apiKey = "d28ejfpr01qjsuf31jj0d28ejfpr01qjsuf31jjg";
 const companies = [
     { symbol: "AAPL", name: "Apple", logo: "https://logo.clearbit.com/apple.com" },
@@ -59,24 +56,25 @@ async function displayStocks() {
          <p><strong>Change:</strong> ${(data.c - data.pc).toFixed(2)}</p>
           <p><strong>% Change:</strong> ${percentChange}%</p>
            <canvas id="chart-${company.symbol}" width="400" height="200"></canvas>
+           <div id="news-${company.symbol}" class="news-section">
+              <p><strong>Latest News:</strong></p>
+              <ul class="news-list"></ul>
+           </div>
           </div>
-          
-
-          `;
+        `;
         
         container.appendChild(card);
         loadStockChart(company.symbol);
+        loadNews(company.symbol);  // 👈 Added line
         const viewBtn = card.querySelector(".view-btn");
         viewBtn.addEventListener("click", () => {
-         card.classList.toggle("expanded");
-        viewBtn.textContent = card.classList.contains("expanded") ? "Hide" : "View More";
-});
-
+            card.classList.toggle("expanded");
+            viewBtn.textContent = card.classList.contains("expanded") ? "Hide" : "View More";
+        });
     }
     const now = new Date();
     document.getElementById("lastUpdated").textContent = 
     `Last updated at ${now.toLocaleTimeString()}`;
-
 }
 
 async function viewDetails(symbol, name) {
@@ -147,8 +145,6 @@ async function loadStockChart(symbol) {
   }
 }
 
-
-
 document.getElementById("refreshBtn").addEventListener("click", displayStocks);
 document.getElementById("darkModeBtn").addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
@@ -160,4 +156,26 @@ window.onload = () => {
 
 function closeModal() {
     document.getElementById("stockModal").style.display = "none";
+}
+
+// 🆕 News Fetching Function
+async function loadNews(symbol) {
+  try {
+    const today = new Date().toISOString().split("T")[0];
+    const past = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+    const url = `https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=${past}&to=${today}&token=${apiKey}`;
+
+    const res = await fetch(url);
+    const articles = await res.json();
+
+    const newsContainer = document.querySelector(`#news-${symbol} .news-list`);
+    if (!newsContainer || !Array.isArray(articles)) return;
+
+    newsContainer.innerHTML = articles.slice(0, 3).map(article => `
+      <li><a href="${article.url}" target="_blank">${article.headline}</a></li>
+    `).join("");
+
+  } catch (err) {
+    console.error("News fetch error:", err);
+  }
 }
