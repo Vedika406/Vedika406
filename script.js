@@ -34,63 +34,61 @@ async function getUsdToInrRate() {
     const data = await res.json();
     return data.rates.INR;
 }
+
 async function displayStocks() {
-  const container = document.getElementById("stocksContainer");
-  container.innerHTML = "";
+    const container = document.getElementById("stocksContainer");
+    container.innerHTML = "";
 
-  for (let i = 0; i < companies.length; i++) {
-    const company = companies[i];
-    const data = await fetchStock(company.symbol);
-    const percentChange = ((data.c - data.pc) / data.pc * 100).toFixed(2);
+    for (let i = 0; i < companies.length; i++) {
+        const company = companies[i];
+        const data = await fetchStock(company.symbol);
+        const percentChange = ((data.c - data.pc) / data.pc * 100).toFixed(2);
 
-    const card = document.createElement("div");
-    card.classList.add("stock-card");
-    card.setAttribute("data-name", `${company.name} ${company.symbol}`.toLowerCase());
+        const card = document.createElement("div");
+        card.classList.add("stock-card");
 
-    card.innerHTML = `
-      <img src="${company.logo}" class="stock-logo" alt="${company.name}">
-      <div class="stock-details">
-        <h3>${company.name} (${company.symbol})</h3>
-        <p class="${data.c >= data.pc ? 'price-up' : 'price-down'}">
-          $${data.c.toFixed(2)} (${percentChange}%)
-        </p>
-      </div>
-      <button class="view-btn">View More</button>
-      <div class="more-info" style="display:none;">
-        <p><strong>Current Price:</strong> $${data.c.toFixed(2)}</p>
-        <p><strong>Change:</strong> ${(data.c - data.pc).toFixed(2)}</p>
-        <p><strong>% Change:</strong> ${percentChange}%</p>
-        <canvas id="chart-${company.symbol}" width="400" height="200"></canvas>
-        <div class="news-section" id="news-${company.symbol}">
-          <h4>📰 Latest News</h4>
-          <ul class="news-list">
-            <li>Loading news...</li>
-          </ul>
-        </div>
-      </div>
-    `;
+        const chartApiKey = i < 10
+            ? "3127e11a4fea46469190cc7c0d1eab3d"
+            : "765d59d693b34948a506fc14e69d508d";
 
-    const viewBtn = card.querySelector(".view-btn");
-    const moreInfo = card.querySelector(".more-info");
+        card.setAttribute("data-name", `${company.name} ${company.symbol}`.toLowerCase());
 
-    viewBtn.addEventListener("click", () => {
-      if (!card.classList.contains("expanded")) {
-        loadStockChart(company.symbol);
-        loadNews(company.symbol); // 🆕 Load news when expanded
-      }
-      card.classList.toggle("expanded");
-      moreInfo.style.display = card.classList.contains("expanded") ? "block" : "none";
-      viewBtn.textContent = card.classList.contains("expanded") ? "Hide" : "View More";
-    });
+        card.innerHTML = `
+            <img src="${company.logo}" class="stock-logo" alt="${company.name}">
+            <div class="stock-details">
+                <h3>${company.name} (${company.symbol})</h3>
+                <p class="${data.c >= data.pc ? 'price-up' : 'price-down'}">
+                    $${data.c.toFixed(2)} (${percentChange}%)
+                </p>
+            </div>
+            <button class="view-btn">View More</button>
+            <div class="more-info" style="display:none;">
+                <p><strong>Current Price:</strong> $${data.c.toFixed(2)}</p>
+                <p><strong>Change:</strong> ${(data.c - data.pc).toFixed(2)}</p>
+                <p><strong>% Change:</strong> ${percentChange}%</p>
+                <canvas id="chart-${company.symbol}" width="400" height="200"></canvas>
+            </div>
+        `;
 
-    container.appendChild(card);
-  }
+        const viewBtn = card.querySelector(".view-btn");
+        const moreInfo = card.querySelector(".more-info");
 
-  const now = new Date();
-  document.getElementById("lastUpdated").textContent =
-    `Last updated at ${now.toLocaleTimeString()}`;
+        viewBtn.addEventListener("click", () => {
+            if (!card.classList.contains("expanded")) {
+                loadStockChart(company.symbol, chartApiKey);
+            }
+            card.classList.toggle("expanded");
+            moreInfo.style.display = card.classList.contains("expanded") ? "block" : "none";
+            viewBtn.textContent = card.classList.contains("expanded") ? "Hide" : "View More";
+        });
+
+        container.appendChild(card);
+    }
+
+    const now = new Date();
+    document.getElementById("lastUpdated").textContent =
+        `Last updated at ${now.toLocaleTimeString()}`;
 }
-
 
 async function viewDetails(symbol, name) {
     const data = await fetchStock(symbol);
@@ -206,24 +204,3 @@ async function loadNews(symbol) {
         console.error("News fetch error:", err);
     }
 }
-
-// 🔍 Search Feature
-document.getElementById("searchInput").addEventListener("input", function() {
-    const filter = this.value.toLowerCase();
-    const cards = document.querySelectorAll(".stock-card");
-
-    cards.forEach(card => {
-        const name = card.getAttribute("data-name"); // from displayStocks()
-        if (name.includes(filter)) {
-            card.style.display = "";
-        } else {
-            card.style.display = "none";
-        }
-    });
-});
-
-
-
-
-
-
